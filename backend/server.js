@@ -5,12 +5,18 @@ const favoritesRouter = require("./routes/favorites");
 
 const app = express();
 
+// CORS configuration
+const corsOptions = {
+  origin: "https://bitecraft-4.onrender.com", // Frontend URL
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Connect to the database
-connectDB(); // Ensure this function doesn't use deprecated options (see note below)
+connectDB();
 
 // Routes
 app.use("/api/users", require("./routes/userRoutes"));
@@ -18,7 +24,7 @@ app.use("/api/favorites", favoritesRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error("Error:", err.stack); // Log full stack trace for debugging
+  console.error("Error:", err.stack);
   res.status(500).json({ message: "Server error", error: err.message });
 });
 
